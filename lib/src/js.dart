@@ -171,15 +171,26 @@ class FlutterDatascript extends UseJS {
   }
 
   /// Listen for changes on the given connection.
-  ///
-  /// Returns the listen key.
-  String listen(int conn, Function callback, {String? key}) {
-    throw UnimplementedError();
+  listen(int conn, String key, void Function (dynamic) callback) {
+    jsEngine.onMessage(key, callback);
+    var code = """
+    vendor.ds.listen(state.conns[$conn], '$key', (report) => {
+      sendMessage('$key', JSON.stringify(report));
+    });
+    """;
+    var result = jsEngine.evaluate(code);
+    assert(!result.isError, result.toString());
   }
 
   /// Removes registered listener from connection. See also [[listen!]].
   unListen(int conn, String key) {
-    throw UnimplementedError();
+    // FIXME: the listener should be removed properly.
+    jsEngine.onMessage(key, (report) { });
+    var code = """
+    vendor.ds.unlisten(state.conns[$conn], '$key');
+    """;
+    var result = jsEngine.evaluate(code);
+    assert(!result.isError, result.toString());
   }
 
   /// Does a lookup in tempids map, returning an entity id that tempid was
