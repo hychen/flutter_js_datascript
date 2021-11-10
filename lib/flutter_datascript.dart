@@ -1,3 +1,3 @@
 library flutter_datascript;
 
-export 'src/js.dart';
+export 'src/core.dart';

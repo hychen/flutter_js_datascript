@@ -1,14 +1,17 @@
+import 'package:flutter_datascript/src/js.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_datascript/flutter_datascript.dart';
 
 void main() {
   test('createConn', () {
-    var d = FlutterDatascript();
-    d.createConn();
-    d.createConn();
-    expect(d.createConn(), 2);
-    expect(d.totalConnections, 3);
+    final d = FlutterDatascript();
+    // key are not the same.
+    final JsRef ref1 = d.createConn();
+    final JsRef ref2 = d.createConn();
+    expect(ref1.key != ref2.key, true);
+    expect(d.connections[0], ref1.key);
+    expect(d.connections[1], ref2.key);
   });
 
   test('transact', () async {
@@ -38,7 +41,7 @@ void main() {
 
   test('triggers TxReport', () async {
     var d = FlutterDatascript();
-    var connId = await d.createConn();
+    var connId = d.createConn();
     var datoms = [
       {
         ":db/id": -1,
@@ -74,13 +77,15 @@ void main() {
 
     // Use JS API to create connection and add data to DB
     // create connection using schema
-    var conn = await d.createConn(schema: schema);
+    var conn = d.createConn(schema: schema);
 
     // setup listener called main
     // pushes each entity (report) to an Array of reports
     // This is just a simple example. Make your own!
     var reports = [];
-    d.listen(conn, 'main', (report) => {reports.add(report)} );
+    d.listen(conn, 'main', (report) {
+      reports.add(report);
+    });
 
     // define initial datoms to be used in transaction
     var datoms = [
@@ -101,15 +106,15 @@ void main() {
 
     // Tx is Js Array of Object or Array
     // pass datoms as transaction data
-    await d.transact(conn, datoms, txMeta: "initial info about Igor and Ivan");
+    var report = d.transact(conn, datoms, txMeta: "initial info about Igor and Ivan");
 
-    var db = await d.db(conn);
+    var db = d.db(conn);
+
     // Fetch names of people who are friends with someone 18 years old
     // query values from conn with JS API
     var result = await d.q(
         '[:find ?n :in \$ ?a :where [?e "friend" ?f] [?e "age" ?a] [?f "name" ?n]]',
         [db, 18]);
-
     // print query result to console!
     expect(result, [["Igor"]]); // [["Igor"]]
   });
