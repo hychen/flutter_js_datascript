@@ -17,7 +17,7 @@ class JsRef {
   JsRef(this.ns, this.key);
 
   factory JsRef.define(JsContext context, String ns, String updater) {
-    final ref = JsRef.gen(ns);
+    final ref = JsRef.fromNs(ns);
     ref.update(context, updater);
     return ref;
   }
@@ -26,7 +26,7 @@ class JsRef {
     return JsRef(ns, key);
   }
 
-  factory JsRef.gen(ns) {
+  factory JsRef.fromNs(ns) {
     return JsRef(ns, uuid.v4());
   }
 

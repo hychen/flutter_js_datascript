@@ -4,13 +4,13 @@ import 'package:flutter_datascript/src/js.dart';
 void main() {
   group('JsRef', () {
     test('update', () {
-      final ref = JsRef.gen('databases');
+      final ref = JsRef.fromNs('databases');
       expect(ref.toJsCode(updater: "2"),
           "state['databases']['${ref.key}'] = 2");
     });
 
     test('toJsCode()', () {
-      final ref = JsRef.gen('database');
+      final ref = JsRef.fromNs('database');
       expect(ref.toJsCode(), "state['database']['${ref.key}']");
     });
   });
