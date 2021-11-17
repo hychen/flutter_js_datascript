@@ -1,4 +1,4 @@
-import 'package:flutter_datascript/src/js.dart';
+import 'package:flutter_js_context/flutter_js_context.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_datascript/flutter_datascript.dart';

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'js.dart';
+import 'package:flutter_js_context/flutter_js_context.dart';
 
 typedef Schema = Map;
 typedef PullResult = Map;
@@ -32,17 +32,16 @@ class TxReport {
 
 class FlutterDatascript {
   JsContext context;
-  int totalConnections = 0;
 
   FlutterDatascript() : context = JsContext() {
     context.require('./assets/js/bundle.js', ['vendor.ds']);
   }
 
   /// Returns connections ids.
-  List get connections => context.evaluate("Object.keys(state.connections)");
+  List get connections => context.evaluate("Object.keys(${context.stateVarName}.connections)");
 
   /// Returns database ids.
-  List get databases => context.evaluate("Object.keys(state.databases)");
+  List get databases => context.evaluate("Object.keys(${context.stateVarName}.databases)");
 
   // -------------------------------------------------------------------------
   // JS public APIs.
