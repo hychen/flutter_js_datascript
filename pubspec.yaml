@@ -1,7 +1,7 @@
-name: flutter_datascript
-description: A new Flutter package project.
+name: flutter_js_datascript
+description: Using DataScript in Flutter Apps.
 version: 0.0.1
-homepage:
+homepage: https://github.com/hychen/flutter_js_datascript
 
 environment:
   sdk: ">=2.14.0 <3.0.0"
@@ -19,7 +19,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^1.0.0
   flutter_js_asset:
-    path: ../flutter_js_asset
+    git: https://github.com/hychen/flutter_js_asset.git
   build_runner: ^2.1.5
 
 # For information on the generic Dart part of this file, see the

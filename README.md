@@ -25,13 +25,13 @@ Use this package to
 ## Getting started
 
 ```shell
-flutter pub add flutter_datascript
+flutter pub add flutter_js_datascript
 ```
 
 ## Usage
 
 ```dart
-import 'package:flutter_datascript/flutter_datascript.dart';
+import 'package:flutter_js_datascript/flutter_js_datascript.dart';
 
 void main() async {
     var d = FlutterDatascript();
