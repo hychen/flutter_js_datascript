@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_js_context/flutter_js_context.dart';
+import 'assets.dart';
 
 typedef Schema = Map;
 typedef PullResult = Map;
@@ -34,7 +35,7 @@ class FlutterDatascript {
   JsContext context;
 
   FlutterDatascript() : context = JsContext() {
-    context.require('./assets/js/bundle.js', ['vendor.ds']);
+    context.evaluate(jsBundle);
   }
 
   /// Returns connections ids.

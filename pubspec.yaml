@@ -11,13 +11,16 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_js: ^0.5.0+3
-  flutter_js_context: 
+  flutter_js_context:
     git: https://github.com/hychen/flutter_js_context.git
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
+  flutter_js_asset:
+    path: ../flutter_js_asset
+  build_runner: ^2.1.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -35,9 +38,7 @@ flutter:
   #
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-  assets:
-    - assets/
-    - assets/js/
+  #assets:
 
   # To add custom fonts to your package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

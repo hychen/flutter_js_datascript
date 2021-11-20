@@ -1,0 +1,7 @@
+# Read about `build.yaml` at https://pub.dev/packages/build_config
+targets:
+  $default:
+    builders:
+      flutter_js_asset|bundle_builder:
+        options:
+
