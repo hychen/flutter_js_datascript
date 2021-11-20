@@ -31,10 +31,10 @@ class TxReport {
       this.txMeta});
 }
 
-class FlutterDatascript {
+class DataScript {
   JsContext context;
 
-  FlutterDatascript() : context = JsContext() {
+  DataScript() : context = JsContext() {
     context.evaluate(jsBundle);
   }
 

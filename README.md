@@ -34,7 +34,7 @@ flutter pub add flutter_js_datascript
 import 'package:flutter_js_datascript/flutter_js_datascript.dart';
 
 void main() async {
-    var d = FlutterDatascript();
+    var d = Datascript();
 
     // create DB schema, a regular JS Object
     var schema = {

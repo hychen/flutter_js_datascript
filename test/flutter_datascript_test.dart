@@ -5,7 +5,7 @@ import 'package:flutter_js_datascript/flutter_js_datascript.dart';
 
 void main() {
   test('createConn', () {
-    final d = FlutterDatascript();
+    final d = DataScript();
     // key are not the same.
     final JsRef ref1 = d.createConn();
     final JsRef ref2 = d.createConn();
@@ -15,7 +15,7 @@ void main() {
   });
 
   test('transact', () async {
-    var d = FlutterDatascript();
+    var d = DataScript();
     var connId = await d.createConn();
     // define initial datoms to be used in transaction
     var datoms = [
@@ -40,7 +40,7 @@ void main() {
   });
 
   test('triggers TxReport', () async {
-    var d = FlutterDatascript();
+    var d = DataScript();
     var connId = d.createConn();
     var datoms = [
       {
@@ -67,7 +67,7 @@ void main() {
   });
 
   test('js-like example works', () async {
-    var d = FlutterDatascript();
+    var d = DataScript();
 
     // create DB schema, a regular JS Object
     var schema = {
