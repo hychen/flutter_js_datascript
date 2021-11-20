@@ -13,13 +13,13 @@ dependencies:
   flutter_js: ^0.5.0+3
   flutter_js_context:
     git: https://github.com/hychen/flutter_js_context.git
+  flutter_js_asset:
+    git: https://github.com/hychen/flutter_js_asset.git
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
-  flutter_js_asset:
-    git: https://github.com/hychen/flutter_js_asset.git
   build_runner: ^2.1.5
 
 # For information on the generic Dart part of this file, see the
