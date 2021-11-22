@@ -2,6 +2,9 @@
 targets:
   $default:
     builders:
+      json_serializable:
+        options:
+          explicit_to_json: true
       flutter_js_asset|bundle_builder:
         options:
 

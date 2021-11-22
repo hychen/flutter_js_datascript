@@ -1,9 +1,11 @@
 import 'package:flutter_js_context/flutter_js_context.dart';
+import 'package:flutter_js_datascript/src/schema.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_js_datascript/flutter_js_datascript.dart';
 
 void main() {
+
   test('createConn', () {
     final d = DataScript();
     // key are not the same.
@@ -70,10 +72,10 @@ void main() {
     var d = DataScript();
 
     // create DB schema, a regular JS Object
-    var schema = {
-      "aka": {":db/cardinality": ":db.cardinality/many"},
-      "friend": {":db/valueType": ":db.type/ref"}
-    };
+    final builder = SchemaBuilder()
+      ..attr('aka', cardinality: Cardinality.many)
+      ..attr('friend', valueType: ValueType.ref);
+    final schema = builder.build();
 
     // Use JS API to create connection and add data to DB
     // create connection using schema

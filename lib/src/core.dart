@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter_js_context/flutter_js_context.dart';
+import 'schema.dart';
 import 'assets.dart';
 
-typedef Schema = Map;
 typedef PullResult = Map;
 
 class DataScript {

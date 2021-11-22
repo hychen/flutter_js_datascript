@@ -15,12 +15,14 @@ dependencies:
     git: https://github.com/hychen/flutter_js_context.git
   flutter_js_asset:
     git: https://github.com/hychen/flutter_js_asset.git
+  json_annotation: ^4.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
   build_runner: ^2.1.5
+  json_serializable: ^6.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
