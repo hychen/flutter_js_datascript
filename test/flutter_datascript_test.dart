@@ -1,5 +1,4 @@
 import 'package:flutter_js_context/flutter_js_context.dart';
-import 'package:flutter_js_datascript/src/schema.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_js_datascript/flutter_js_datascript.dart';

@@ -37,10 +37,10 @@ void main() async {
     var d = Datascript();
 
     // create DB schema, a regular JS Object
-    var schema = {
-      "aka": {":db/cardinality": ":db.cardinality/many"},
-      "friend": {":db/valueType": ":db.type/ref"}
-    };
+    final builder = SchemaBuilder()
+      ..attr('aka', cardinality: Cardinality.many)
+      ..attr('friend', valueType: ValueType.ref);
+    final schema = builder.build();
 
     // Use JS API to create connection and add data to DB
     // create connection using schema
