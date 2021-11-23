@@ -138,9 +138,9 @@ class DataScript {
   /// Applies transaction the underlying database value and atomically updates
   /// connection reference to point to the result of that transaction, new db
   /// value.
-  Future<Map> transact(JsRef conn, List txDeta, {txMeta}) async {
+  Future<Map> transact(JsRef conn, List txData, {txMeta}) async {
     var code = """
-    vendor.ds.transact(${conn.toJsCode()},${jsonEncode(txDeta)}, ${jsonEncode(txMeta)});
+    vendor.ds.transact(${conn.toJsCode()},${jsonEncode(txData)}, ${jsonEncode(txMeta)});
     """;
     return await context.evaluateAsync(code);
   }
