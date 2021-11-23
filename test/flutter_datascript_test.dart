@@ -1,4 +1,5 @@
 import 'package:flutter_js_context/flutter_js_context.dart';
+import 'package:flutter_js_datascript/src/txreport.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_js_datascript/flutter_js_datascript.dart';
@@ -58,13 +59,13 @@ void main() {
       // use :db/add to link datom -2 as friend of datom -1
       [":db/add", -1, "friend", -2]
     ];
-    var r;
+    late final TxReport r;
     d.listen(connId, 'main', expectAsync1((report) {
       r = report;
     }));
 
     await d.transact(connId, datoms, txMeta: "oops");
-    expect(r['tx_meta'], 'oops');
+    expect(r.txMeta, 'oops');
   });
 
   test('js-like example works', () async {

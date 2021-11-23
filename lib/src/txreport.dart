@@ -1,12 +1,15 @@
-import 'package:flutter_js_context/flutter_js_context.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'txreport.g.dart';
 
 /// Transaction Report
+@JsonSerializable(fieldRename: FieldRename.snake)
 class TxReport {
   /// db value before transaction
-  final JsRef dbBefore;
+  final Map dbBefore;
 
   /// db value after transaction
-  final JsRef dbAfter;
+  final Map dbAfter;
 
   /// plain datoms that were added/retracted from db-before
   final List txData;
@@ -23,4 +26,8 @@ class TxReport {
         required this.tempids,
         required this.txData,
         this.txMeta});
+
+  factory TxReport.fromJson(Map<String, dynamic> json) =>
+      _$TxReportFromJson(json);
+  Map<String, dynamic> toJson() => _$TxReportToJson(this);
 }

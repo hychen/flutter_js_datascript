@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_js_context/flutter_js_context.dart';
+import 'package:flutter_js_datascript/src/txreport.dart';
 import 'schema.dart';
 import 'assets.dart';
 
@@ -14,10 +15,12 @@ class DataScript {
   }
 
   /// Returns connections ids.
-  List get connections => context.evaluate("Object.keys(${context.stateVarName}.connections)");
+  List get connections =>
+      context.evaluate("Object.keys(${context.stateVarName}.connections)");
 
   /// Returns database ids.
-  List get databases => context.evaluate("Object.keys(${context.stateVarName}.databases)");
+  List get databases =>
+      context.evaluate("Object.keys(${context.stateVarName}.databases)");
 
   // -------------------------------------------------------------------------
   // JS public APIs.
@@ -150,9 +153,8 @@ class DataScript {
   }
 
   /// Listen for changes on the given connection.
-  /// @FIXME: convert Js-TxReport to Dart-TxReport.
   listen(JsRef conn, String key, void Function(dynamic) callback) {
-    context.runtime.onMessage(key, callback);
+    context.runtime.onMessage(key, (json) => callback(TxReport.fromJson(json)));
     var code = """
     vendor.ds.listen(${conn.toJsCode()}, '$key', (report) => {
       sendMessage('$key', JSON.stringify(report));
