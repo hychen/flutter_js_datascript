@@ -11,8 +11,7 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-Using:w
-DataScript in Flutter Apps.
+Using DataScript in Flutter Apps.
 
 > This package is in very early stage and only be tested on MacOS. Use it with caution and file
 any potential issues you see.
