@@ -1,3 +1,7 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+Supported APIs:
+  - creteConn
+  - q
+  - listen
+  - unlisten
