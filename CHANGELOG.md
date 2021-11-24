@@ -1,7 +1,3 @@
-## 0.0.1
+## 0.1.0
 
-Supported APIs:
-  - creteConn
-  - q
-  - listen
-  - unlisten
+* Initial Development Release, supports `creteConn`, `q`, `listen`, `unlisten`.
