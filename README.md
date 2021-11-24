@@ -11,7 +11,8 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-Use DataScript in Flutter Apps.
+Using:w
+DataScript in Flutter Apps.
 
 > This package is in very early stage and only be tested on MacOS. Use it with caution and file
 any potential issues you see.
@@ -21,6 +22,12 @@ any potential issues you see.
 Use this package to
 - Transact with Datoms.
 - Query result by using [datalog](https://en.wikipedia.org/wiki/Datalog) language.
+
+### Supported APIs:
+  - creteConn
+  - q
+  - listen
+  - unlisten
 
 ## Getting started
 
