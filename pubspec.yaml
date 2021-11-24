@@ -1,6 +1,6 @@
 name: flutter_js_datascript
 description: Using DataScript in Flutter Apps.
-version: 0.0.1
+version: 0.1.0
 homepage: https://github.com/hychen/flutter_js_datascript
 
 environment:
