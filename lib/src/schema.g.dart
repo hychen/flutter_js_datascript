@@ -8,7 +8,8 @@ part of 'schema.dart';
 
 SchemaAttribute _$SchemaAttributeFromJson(Map<String, dynamic> json) =>
     SchemaAttribute(
-      $enumDecodeNullable(_$ValueTypesEnumMap, json[':db/valueType']),
+      $enumDecodeNullable(_$UniqueEnumMap, json[':db/unique']),
+      $enumDecodeNullable(_$ValueTypeEnumMap, json[':db/valueType']),
       $enumDecodeNullable(_$CardinalityEnumMap, json[':db/cardinality']),
       json[':db/doc'] as String?,
     );
@@ -22,13 +23,19 @@ Map<String, dynamic> _$SchemaAttributeToJson(SchemaAttribute instance) {
     }
   }
 
-  writeNotNull(':db/valueType', _$ValueTypesEnumMap[instance.valueType]);
+  writeNotNull(':db/unique', _$UniqueEnumMap[instance.ident]);
+  writeNotNull(':db/valueType', _$ValueTypeEnumMap[instance.valueType]);
   writeNotNull(':db/cardinality', _$CardinalityEnumMap[instance.cardinality]);
   writeNotNull(':db/doc', instance.doc);
   return val;
 }
 
-const _$ValueTypesEnumMap = {
+const _$UniqueEnumMap = {
+  Unique.value: ':db.unique',
+  Unique.identity: ':db.unique/identity',
+};
+
+const _$ValueTypeEnumMap = {
   ValueType.keyword: ':db.type/keyword',
   ValueType.string: ':db.type/string',
   ValueType.boolean: ':db.type/boolean',

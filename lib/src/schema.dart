@@ -8,6 +8,17 @@ import 'package:json_annotation/json_annotation.dart';
 part 'schema.g.dart';
 
 @JsonEnum()
+enum Unique {
+  /// :db.unique/value
+  @JsonValue(':db.unique/value')
+  value,
+
+  ///  :db.unique/identity
+  @JsonValue(':db.unique/identity')
+  identity
+}
+
+@JsonEnum()
 enum ValueType {
   /// :db.type/keyword such as :color
   @JsonValue(':db.type/keyword')
@@ -71,6 +82,9 @@ enum Cardinality {
 
 @JsonSerializable()
 class SchemaAttribute {
+  @JsonKey(name: ':db/unique', includeIfNull: false)
+  final Unique? ident;
+
   @JsonKey(name: ':db/valueType', includeIfNull: false)
   final ValueType? valueType;
 
@@ -80,7 +94,7 @@ class SchemaAttribute {
   @JsonKey(name: ':db/doc', includeIfNull: false)
   final String? doc;
 
-  SchemaAttribute(this.valueType, this.cardinality, this.doc);
+  SchemaAttribute(this.ident, this.valueType, this.cardinality, this.doc);
 
   factory SchemaAttribute.fromJson(Map<String, dynamic> json) =>
       _$SchemaAttributeFromJson(json);
@@ -103,8 +117,8 @@ class SchemaBuilder {
 
   /// Registers an attribute.
   void attr(String name,
-      {ValueType? valueType, Cardinality? cardinality, String? doc}) {
-    schema[name] = SchemaAttribute(valueType, cardinality, doc);
+      {Unique? ident, ValueType? valueType, Cardinality? cardinality, String? doc}) {
+    schema[name] = SchemaAttribute(ident, valueType, cardinality, doc);
   }
 
   /// Returns built schema.
