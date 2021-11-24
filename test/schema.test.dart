@@ -12,14 +12,15 @@ void main() {
           cardinality: Cardinality.many)
       ..attr('person/age');
     final s = builder.build();
-    expect(jsonEncode(s), jsonEncode({
-      "person/name": {
-        ":db/unique": ":db.unique/identity",
-        ":db/valueType": ":db.type/ref",
-        ":db/cardinality": ":db.cardinality/many"
-      },
-      "person/age": {
-      }
-    }));
+    expect(
+        jsonEncode(s),
+        jsonEncode({
+          "person/name": {
+            ":db/unique": ":db.unique/identity",
+            ":db/valueType": ":db.type/ref",
+            ":db/cardinality": ":db.cardinality/many"
+          },
+          "person/age": {}
+        }));
   });
 }

@@ -111,13 +111,15 @@ typedef Schema = Map<String, SchemaAttribute>;
 /// final schema = builder.build();
 /// ```
 class SchemaBuilder {
-
   /// The schema to build.
   final Schema schema = {};
 
   /// Registers an attribute.
   void attr(String name,
-      {Unique? ident, ValueType? valueType, Cardinality? cardinality, String? doc}) {
+      {Unique? ident,
+      ValueType? valueType,
+      Cardinality? cardinality,
+      String? doc}) {
     schema[name] = SchemaAttribute(ident, valueType, cardinality, doc);
   }
 

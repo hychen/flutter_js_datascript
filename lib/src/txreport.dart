@@ -22,10 +22,10 @@ class TxReport {
 
   TxReport(
       {required this.dbBefore,
-        required this.dbAfter,
-        required this.tempids,
-        required this.txData,
-        this.txMeta});
+      required this.dbAfter,
+      required this.tempids,
+      required this.txData,
+      this.txMeta});
 
   factory TxReport.fromJson(Map<String, dynamic> json) =>
       _$TxReportFromJson(json);

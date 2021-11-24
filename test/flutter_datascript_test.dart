@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_js_datascript/flutter_js_datascript.dart';
 
 void main() {
-
   test('js-like example works', () async {
     var d = DataScript();
 
@@ -44,7 +43,8 @@ void main() {
 
     // Tx is Js Array of Object or Array
     // pass datoms as transaction data
-    var report = d.transact(conn, datoms, txMeta: "initial info about Igor and Ivan");
+    var report =
+        d.transact(conn, datoms, txMeta: "initial info about Igor and Ivan");
 
     var db = d.db(conn);
 
@@ -54,6 +54,8 @@ void main() {
         '[:find ?n :in \$ ?a :where [?e "friend" ?f] [?e "age" ?a] [?f "name" ?n]]',
         [db, 18]);
     // print query result to console!
-    expect(result, [["Igor"]]); // [["Igor"]]
+    expect(result, [
+      ["Igor"]
+    ]); // [["Igor"]]
   });
 }
