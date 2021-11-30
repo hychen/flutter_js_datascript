@@ -27,9 +27,9 @@ class DataScript {
   // -------------------------------------------------------------------------
 
   /// Creates an empty database with an optional schema.
-  JsRef emptyDb({Schema? schema}) {
-    return JsRef.define(context, 'databases',
-        "vendor.ds.empty_db(${jsonEncode(schema)});");
+  JsRef emptyDb({dynamic schema}) {
+    return JsRef.define(
+        context, 'databases', "vendor.ds.empty_db(${jsonEncode(schema)});");
   }
 
   /// Low-level fn for creating database quickly from a trusted sequence of
@@ -75,8 +75,15 @@ class DataScript {
 
   /// Applies transaction to an immutable db value, returning new immutable db
   /// value. Same as `(:db-after (with db tx-data))`.
-  Future dbWith(JsRef db, List entities) {
-    throw UnimplementedError();
+  ///
+  /// ```
+  /// var db = d.emptyDb();
+  /// var db1 = await d.dbWith(db, [[":db/add", 1, "name", "Ivan"],
+  ///                               [":db/add", 1, "age", 17]]);
+  /// ```
+  Future<JsRef> dbWith(JsRef db, List entities) async {
+    return JsRef.define(context, 'databases',
+        """vendor.ds.db_with(${db.toJsCode()}, ${jsonEncode(entities)});""");
   }
 
   /// Retrieves an entity by its id from database. Entities are lazy map-like
