@@ -4,6 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_js_datascript/src/core.dart';
 
 void main() {
+  test('emptyDb', () {
+    final d = DataScript();
+    final db1 = d.emptyDb();
+    expect(d.databases[0], db1.key);
+  });
+
   test('createConn', () {
     final d = DataScript();
     // key are not the same.

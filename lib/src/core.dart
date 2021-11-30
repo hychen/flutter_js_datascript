@@ -27,8 +27,9 @@ class DataScript {
   // -------------------------------------------------------------------------
 
   /// Creates an empty database with an optional schema.
-  Future<JsRef> emptyDb({Schema? schema}) {
-    throw UnimplementedError();
+  JsRef emptyDb({Schema? schema}) {
+    return JsRef.define(context, 'databases',
+        "vendor.ds.empty_db(${jsonEncode(schema)});");
   }
 
   /// Low-level fn for creating database quickly from a trusted sequence of
