@@ -68,6 +68,39 @@ void main() {
         foreach[0][1]);
   });
 
+  test('entity_refs', () async {
+    var d = DataScript();
+    var schema = {"father": {":db/valueType": ":db.type/ref"},
+      "children": {":db/valueType": ":db.type/ref",
+        ":db/cardinality": ":db.cardinality/many"}};
+    var db = await d.dbWith(d.emptyDb(schema: schema),
+        [{":db/id": 1, "children": [10]},
+          {":db/id": 10, "father": 1, "children": [100, 101]},
+          {":db/id": 100, "father": 10}]);
+
+    e(id) {
+      return d.entity(db, id);
+    };
+
+    expect([10], e(1)["children"]);
+    expect([101, 100].reversed, e(10)["children"]);
+
+    // empty attribute
+    expect(null, e(100)["children"]);
+
+    // nested navigation
+    // expect([100, 101], e(1)["children"][0].get("children"));
+    // expect(10, e(10)["children"][0].get("father").get(":db/id"));
+    // expect([10], e(10)[("father")].("children"));
+    //
+    // // backward navigation
+    // expect(null, e(1).get("_children"));
+    // expect([10], e(1).get("_father"));
+    // expect([1], e(10).get("_children"));
+    // expect([100], e(10).get("_father"));
+    // expect([1], e(100).get("_children")[0].get("_children"));
+  });
+
   test('dbWith', () async {
     final d = DataScript();
     final db = d.emptyDb();

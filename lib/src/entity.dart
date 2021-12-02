@@ -53,7 +53,25 @@ class Entity implements Map {
 
   @override
   operator [](Object? key) {
-    return api.get(key);
+    aux(element) {
+      // @FIXME: nested nvigation is not implemented.
+      // the element is navigate ref, then we should just returns its eid
+      // because it is a pure js object without functions we want to
+      // use.
+      if(element is Map) {
+        int eid = element['eid'];
+        return eid;
+      } else {
+        return element;
+      }
+    };
+
+    final e = api.get(key);
+    if(e is List) {
+      return e.map(aux).toList();
+    } else {
+      return aux(e);
+    }
   }
 
   @override
