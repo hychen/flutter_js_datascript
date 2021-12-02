@@ -94,8 +94,8 @@ class DataScript {
   }
 
   /// Forces all entity attributes to be eagerly fetched and cached. Only usable for debug output.
-  Future touch(Object e) {
-    throw UnimplementedError();
+  List touch(Entity e) {
+    return e.entries.toList();
   }
 
   /// Returns a db that entity was created from.
