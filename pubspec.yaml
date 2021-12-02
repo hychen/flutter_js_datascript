@@ -14,6 +14,7 @@ dependencies:
   flutter_js_context: ^0.1.0
   flutter_js_asset: ^0.1.0
   json_annotation: ^4.3.0
+  stringr: ^0.0.2-prerelease
 
 dev_dependencies:
   flutter_test:
