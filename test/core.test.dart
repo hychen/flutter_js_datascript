@@ -1,14 +1,71 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_js_context/flutter_js_context.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_js_datascript/src/core.dart';
 import 'package:flutter_js_datascript/src/schema.dart';
 
+import 'package:collection/collection.dart';
+
 void main() {
   test('emptyDb', () {
     final d = DataScript();
     final db1 = d.emptyDb();
     expect(d.databases[0], db1.key);
+  });
+
+  test('entity', () async {
+    var d = DataScript();
+    var schema = {
+      "aka": {":db/cardinality": ":db.cardinality/many"}
+    };
+    var db = await d.dbWith(d.emptyDb(schema: schema), [
+      {
+        ":db/id": 1,
+        "name": "Ivan",
+        "aka": ["X", "Y"]
+      },
+      {":db/id": 2}
+    ]);
+    var e = d.entity(db, 1);
+    expect("Ivan", e["name"]);
+    expect(["X", "Y"], e["aka"]);
+    expect(1, e[":db/id"]);
+
+    expect(db, e.db);
+
+    var e2 = d.entity(db, 2);
+    expect(null, e2["name"]);
+    expect(null, e2["aka"]);
+    expect(2, e2[":db/id"]);
+
+    // Dart/map interface
+    expect(["name", "aka"].reversed, e.keys);
+    expect(
+        [
+          "Ivan",
+          ["X", "Y"]
+        ].reversed,
+        e.values);
+    var a =
+        [
+          const MapEntry("name", "Ivan"),
+          const MapEntry("aka", ["X", "Y"])
+        ].reversed.toList()[0];
+    var b = e.entries.toList()[0];
+    expect(a.key,b.key);
+
+
+    var foreach = [];
+    e.forEach((v, a) {
+      foreach.add([a, v]);
+    });
+    expect(
+        [
+          const MapEntry("name", "Ivan"),
+          const MapEntry("aka", ["X", "Y"])
+        ].reversed.toList()[0].key,
+        foreach[0][1]);
   });
 
   test('dbWith', () async {
@@ -44,6 +101,8 @@ void main() {
         "profile": {"email": "@2"}
       }
     ]);
+
+    var meq = const MapEquality();
     expect([
       [1, "name", "Igor"],
       [1, "profile", 2],
@@ -96,8 +155,7 @@ void main() {
       [2, "profile", 1]
     ], await d.q(q, [db]));
 
-    schema = SchemaBuilder()
-      ..attr("user/profile", valueType: ValueType.ref);
+    schema = SchemaBuilder()..attr("user/profile", valueType: ValueType.ref);
     db0 = d.emptyDb(schema: schema.build());
     db = await d.dbWith(db0, [
       {

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_js_context/flutter_js_context.dart';
 import 'package:flutter_js_datascript/src/txreport.dart';
+import 'package:flutter_js_datascript/src/entity.dart';
 import 'schema.dart';
 import 'assets.dart';
 
@@ -88,8 +89,8 @@ class DataScript {
 
   /// Retrieves an entity by its id from database. Entities are lazy map-like
   /// structures to navigate DataScript database content.
-  Future entity(JsRef db, int eid) {
-    throw UnimplementedError();
+  Entity entity(JsRef db, int eid) {
+    return Entity(context, db, eid);
   }
 
   /// Forces all entity attributes to be eagerly fetched and cached. Only usable for debug output.

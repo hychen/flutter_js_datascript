@@ -24,6 +24,7 @@ class EntityJsApi {
     String next;
     if (i.positionalArguments.isNotEmpty) {
       // @FIXME: should cache entity.
+      // @FIXME: the order of values/keys is incorrect.
       next =
           ".$jsfnName.apply(${entityFactory(db, lookup)}, ${jsonEncode(i.positionalArguments)});";
     } else {
@@ -47,6 +48,8 @@ class EntityJsApi {
 class Entity implements Map {
   final dynamic api;
   Entity(context, db, lookup) : api = EntityJsApi(context, db, lookup);
+
+  JsRef get db => api.db;
 
   @override
   operator [](Object? key) {
