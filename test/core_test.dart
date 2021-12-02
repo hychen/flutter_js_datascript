@@ -277,4 +277,26 @@ void main() {
     await d.transact(connId, datoms, txMeta: "oops");
     expect(r.txMeta, 'oops');
   });
+
+  test('pull', () async {
+    var d = DataScript();
+    var schema = {"father":   {":db/valueType":   ":db.type/ref"},
+      "children": {":db/valueType":   ":db.type/ref",
+        ":db/cardinality": ":db.cardinality/many"}};
+    var db = await d.dbWith(d.emptyDb(schema: schema),
+        [{":db/id": 1,   "name": "Ivan", "children": [10]},
+          {":db/id": 10,  "father":   1, "children": [100, 101]},
+          {":db/id": 100, "father":   10}]);
+
+    var actual, expected;
+
+    actual   = await d.pull(db, '["children"]', 1);
+    expected = {"children": [{":db/id": 10}]};
+    expect(expected, actual);
+
+    actual   = await d.pull(db, '["children", {"father" ["name" :db/id]}]', 10);
+    expected = {"children": [{":db/id": 100}, {":db/id": 101}],
+      "father": {"name": "Ivan", ":db/id": 1}};
+    expect(expected, actual);
+  });
 }

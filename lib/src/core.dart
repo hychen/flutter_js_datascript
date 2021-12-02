@@ -65,8 +65,11 @@ class DataScript {
 
   /// Fetches data from database using recursive declarative description.
   /// See [docs.datomic.com/on-prem/pull.html](https://docs.datomic.com/on-prem/pull.html).
-  Future<List<PullResult>> pull(JsRef db, pattern, int eid) {
-    throw UnimplementedError();
+  Future<dynamic> pull(JsRef db, pattern, int eid) {
+    final code = """
+    vendor.ds.pull(${db.toJsCode()}, '$pattern', ${jsonEncode(eid)});
+    """;
+    return context.evaluateAsync(code);
   }
 
   /// Same as [[pull]], but accepts sequence of ids and returns sequence of maps.
