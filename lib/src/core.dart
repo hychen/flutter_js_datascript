@@ -214,8 +214,12 @@ class DataScript {
 
   /// Similar to [[datoms]], but will return datoms starting from specified
   /// components and including rest of the database until the end of the index.
-  Future seekDatoms(db, index, Object? c1, Object? c2, Object? c3, Object? c4) {
-    throw UnimplementedError();
+  seekDatoms(db, index, Object? c1, Object? c2, Object? c3, Object? c4) {
+    final code = """
+    vendor.ds.seek_datoms(${db.toJsCode()}, '$index', ${jsonEncode(c1)}, ${jsonEncode(c2)}, ${jsonEncode(c3)}, ${jsonEncode(c4)});
+    """;
+    var res = context.evaluate(code) as List;
+    return res.map((e) => [e['e'], e['a'], e['v'], e['tx']]).toList();
   }
 
   /// Returns part of `:avet` index between `[_ attr start]` and `[_ attr end]`

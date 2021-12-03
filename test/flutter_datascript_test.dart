@@ -523,7 +523,21 @@ main() {
       expect("Ivan", res);
     });
 
-    test('datoms', () {}, skip: '@TODO: add datoms, seek_datoms');
+    test('datoms', () {
+      expect([
+        [1, "age", 15, tx0 + 1],
+        [1, "name", "Ivan", tx0 + 1]
+      ], d.datoms(people_db, ":eavt", 1, null, null, null));
+
+      expect([
+        [1, "age", 15, tx0 + 1]
+      ], d.datoms(people_db, ":eavt", 1, "age", null, null));
+
+      expect([
+        [2, "age", 37, tx0 + 1],
+        [3, "age", 37, tx0 + 1]
+      ], d.seekDatoms(people_db, ":avet", "age", 20, null, null));
+    });
 
     test('filter', () {}, skip: '@TODO: add filter');
   });
