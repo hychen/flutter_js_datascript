@@ -3,14 +3,19 @@ import 'package:flutter_js_datascript/src/entity.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
-  final d = DataScript();
-  final db = d.emptyDb();
-  final db1 = await d.dbWith(db, [
-    [":db/add", 1, "name", "Ivan"],
-    [":db/add", 1, "age", 17]
-  ]);
-
   group('Entity', () {
+    var d;
+    var db;
+    var db1;
+
+    setUp(() async {
+      d = DataScript();
+      db = d.emptyDb();
+      db1 = await d.dbWith(db, [
+        [":db/add", 1, "name", "Ivan"],
+        [":db/add", 1, "age", 17]
+      ]);
+    });
     test('delegated JS functions.', () async {
       dynamic e = EntityJsApi(d.context, db1, 1);
       expect(e.has('age'), true);
@@ -42,9 +47,8 @@ void main() async {
         expect(value == 17 || value == 'Ivan', true);
       });
 
-      final ne = e.map((key, value) => MapEntry(key+"_", value));
+      final ne = e.map((key, value) => MapEntry(key + "_", value));
       expect(ne['age_'], 17);
-
     });
   });
 }
