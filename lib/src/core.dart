@@ -206,7 +206,7 @@ class DataScript {
   datoms(
       JsRef db, String index, Object? c1, Object? c2, Object? c3, Object? c4) {
     final code = """
-    vendor.ds.datoms(${db.toJsCode()}, '$index', $c1, $c2, $c3, $c4);
+    vendor.ds.datoms(${db.toJsCode()}, '$index', ${jsonEncode(c1)}, ${jsonEncode(c2)}, ${jsonEncode(c3)}, ${jsonEncode(c4)});
     """;
     var res = context.evaluate(code) as List;
     return res.map((e) => [e['e'], e['a'], e['v'], e['tx']]).toList();

@@ -3,6 +3,7 @@ import 'package:flutter_js_datascript/flutter_js_datascript.dart';
 import 'package:collection/collection.dart';
 
 Function eq = const DeepCollectionEquality.unordered().equals;
+const tx0 = 0x20000000; // we just know it, alright?
 
 main() {
   final d = DataScript();
@@ -249,7 +250,6 @@ main() {
     });
 
     test('conn', () async {
-      var tx0 = 0;
       var datoms = [
         [1, "age", 17, tx0 + 1],
         [1, "name", "Ivan", tx0 + 1]
@@ -313,7 +313,6 @@ main() {
     });
 
     test('lookup_refs', () async {
-      var tx0 = 0;
       final schema = {
         "name": {":db/unique": ":db.unique/identity"}
       };
@@ -356,7 +355,26 @@ main() {
           ]));
     });
 
-    test('resolve_current_tx', () {}, skip: 'tx ');
+    test('resolve_current_tx', () async {
+        var schema = SchemaBuilder()
+          ..attr("created-at", valueType:ValueType.ref);
+        var conn = d.createConn(schema: schema.build());
+        var tx_report = await d.transact(conn, [{"name": "X", "created-at": ":db/current-tx"},
+          {":db/id": ":db/current-tx", "prop1": "val1"},
+          [":db/add", ":db/current-tx", "prop2", "val2"],
+          [":db/add", -1, "name", "Y"],
+          [":db/add", -1, "created-at", ":db/current-tx"]]);
+        var tx = tx_report['tempids'][":db/current-tx"];
+        expect(tx0+1, tx);
+        expect(
+            [[1, "created-at", tx,     tx],
+              [1, "name",       "X",    tx],
+              [2, "created-at", tx,     tx],
+              [2, "name",       "Y",    tx],
+              [tx, "prop1",     "val1", tx],
+              [tx, "prop2",     "val2", tx]],
+            d.datoms(d.db(conn), ":eavt", null,null,null,null));
+    });
   });
 
   group('query', () {
