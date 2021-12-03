@@ -1,9 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'datom.dart';
 
 part 'txreport.g.dart';
 
 txDataFromJson(List txData) {
-  return txData.map((e) => [e['e'], e['a'], e['v'], e['tx']]).toList();
+  return toEavt(txData);
 }
 
 /// Transaction Report

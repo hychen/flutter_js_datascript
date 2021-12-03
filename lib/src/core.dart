@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_js_context/flutter_js_context.dart';
 import 'package:flutter_js_datascript/src/txreport.dart';
 import 'package:flutter_js_datascript/src/entity.dart';
+import 'datom.dart';
 import 'schema.dart';
 import 'assets.dart';
 
@@ -207,7 +208,7 @@ class DataScript {
     vendor.ds.datoms(${db.toJsCode()}, '$index', ${jsonEncode(c1)}, ${jsonEncode(c2)}, ${jsonEncode(c3)}, ${jsonEncode(c4)});
     """;
     var res = context.evaluate(code) as List;
-    return res.map((e) => [e['e'], e['a'], e['v'], e['tx']]).toList();
+    return toEavt(res);
   }
 
   /// Similar to [[datoms]], but will return datoms starting from specified
@@ -217,7 +218,7 @@ class DataScript {
     vendor.ds.seek_datoms(${db.toJsCode()}, '$index', ${jsonEncode(c1)}, ${jsonEncode(c2)}, ${jsonEncode(c3)}, ${jsonEncode(c4)});
     """;
     var res = context.evaluate(code) as List;
-    return res.map((e) => [e['e'], e['a'], e['v'], e['tx']]).toList();
+    return toEavt(res);
   }
 
   /// Returns part of `:avet` index between `[_ attr start]` and `[_ attr end]`
