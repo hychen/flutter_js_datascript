@@ -120,7 +120,36 @@ main() {
       ], await d.q(q, [db]));
     });
 
-    test('.initDb()', () {}, skip: 'TODO: add initDb().');
+    test('.initDb()', () async {
+      var q = '[:find ?n ?a ?tx :where [?e "name" ?n ?tx] [?e "age" ?a]]';
+      dbOk(db) async {
+        expect([
+          ["Ivan", 17, tx0],
+          ["Igor", 35, tx0 + 1]
+        ], await d.q(q, [db]));
+      }
+
+      ;
+      dbOk(d.initDb([
+        [1, "name", "Ivan"],
+        [1, "age", 17],
+        [2, "name", "Igor", tx0 + 1],
+        [2, "age", 35, tx0 + 1]
+      ]));
+      dbOk(d.initDb([
+        {"e": 1, "a": "name", "v": "Ivan"},
+        {"e": 1, "a": "age", "v": 17},
+        {"e": 2, "a": "name", "v": "Igor", "tx": tx0 + 1},
+        {"e": 2, "a": "age", "v": 35, "tx": tx0 + 1}
+      ]));
+      var schema = SchemaBuilder()..attr('aka', cardinality: Cardinality.many);
+      var db = d.initDb([
+        [1, "aka", "X"],
+        [1, "aka", "Y"]
+      ], schema: schema.build());
+      expect(["X", "Y"],
+          await d.q('[:find [?aka ...] :where [_ "aka" ?aka]]', [db]));
+    });
 
     test('db.fn/call', () {}, skip: 'TODO: add db.fn/call support');
 
@@ -356,24 +385,26 @@ main() {
     });
 
     test('resolve_current_tx', () async {
-        var schema = SchemaBuilder()
-          ..attr("created-at", valueType:ValueType.ref);
-        var conn = d.createConn(schema: schema.build());
-        var tx_report = await d.transact(conn, [{"name": "X", "created-at": ":db/current-tx"},
-          {":db/id": ":db/current-tx", "prop1": "val1"},
-          [":db/add", ":db/current-tx", "prop2", "val2"],
-          [":db/add", -1, "name", "Y"],
-          [":db/add", -1, "created-at", ":db/current-tx"]]);
-        var tx = tx_report['tempids'][":db/current-tx"];
-        expect(tx0+1, tx);
-        expect(
-            [[1, "created-at", tx,     tx],
-              [1, "name",       "X",    tx],
-              [2, "created-at", tx,     tx],
-              [2, "name",       "Y",    tx],
-              [tx, "prop1",     "val1", tx],
-              [tx, "prop2",     "val2", tx]],
-            d.datoms(d.db(conn), ":eavt", null,null,null,null));
+      var schema = SchemaBuilder()
+        ..attr("created-at", valueType: ValueType.ref);
+      var conn = d.createConn(schema: schema.build());
+      var tx_report = await d.transact(conn, [
+        {"name": "X", "created-at": ":db/current-tx"},
+        {":db/id": ":db/current-tx", "prop1": "val1"},
+        [":db/add", ":db/current-tx", "prop2", "val2"],
+        [":db/add", -1, "name", "Y"],
+        [":db/add", -1, "created-at", ":db/current-tx"]
+      ]);
+      var tx = tx_report['tempids'][":db/current-tx"];
+      expect(tx0 + 1, tx);
+      expect([
+        [1, "created-at", tx, tx],
+        [1, "name", "X", tx],
+        [2, "created-at", tx, tx],
+        [2, "name", "Y", tx],
+        [tx, "prop1", "val1", tx],
+        [tx, "prop2", "val2", tx]
+      ], d.datoms(d.db(conn), ":eavt", null, null, null, null));
     });
   });
 
