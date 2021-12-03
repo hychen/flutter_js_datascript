@@ -254,19 +254,19 @@ main() {
         [1, "age", 17, tx0 + 1],
         [1, "name", "Ivan", tx0 + 1]
       ];
-      var conn = await d.connFromDatoms(datoms);
+      var conn = d.connFromDatoms(datoms);
       expect(datoms, d.datoms(d.db(conn), ":eavt", null, null, null, null));
 
-      conn = await d.connFromDb(await d.initDb()); //datoms));
+      conn = d.connFromDb(d.initDb(datoms));
       expect(datoms, d.datoms(d.db(conn), ":eavt", null, null, null, null));
 
       var datoms2 = [
         [1, "age", 20, tx0 + 1],
         [1, "sex", "male", tx0 + 1]
       ];
-      d.resetConn(conn, await d.initDb()); //datoms2));
+      d.resetConn(conn, d.initDb(datoms2));
       expect(datoms2, d.datoms(d.db(conn), ":eavt", null, null, null, null));
-    }, skip: 'TODO: add datoms, initDb, connFromDatoms..');
+    });
 
     test('pull', () async {
       var d = DataScript();
@@ -310,6 +310,50 @@ main() {
         "father": {"name": "Ivan", ":db/id": 1}
       };
       expect(expected, actual);
+    });
+
+    test('lookup_refs', () async {
+      var tx0 = 0;
+      final schema = {
+        "name": {":db/unique": ":db.unique/identity"}
+      };
+      var db = await d.dbWith(d.emptyDb(schema: schema), [
+        {":db/id": 1, "name": "Ivan", "age": 18},
+        {":db/id": 2, "name": "Oleg", "age": 32}
+      ]);
+      // entity
+      expect("Ivan", d.entity(db, ["name", "Ivan"])["name"]);
+      // pull
+      expect({"name": "Ivan"}, await d.pull(db, '["name"]', ["name", "Ivan"]));
+      expect(
+          [
+            {"name": "Ivan"},
+            {"name": "Oleg"}
+          ],
+          await d.pullMany(db, '["name"]', [
+            ["name", "Ivan"],
+            ["name", "Oleg"]
+          ]));
+
+      // index access
+      expect([
+        [1, "age", 18, tx0 + 1],
+        [1, "name", "Ivan", tx0 + 1]
+      ], d.datoms(db, ":eavt", ["name", "Ivan"], null, null, null));
+      // queries
+      expect(
+          [
+            [
+              ["name", "Ivan"],
+              18
+            ]
+          ],
+          await d.q("""[:find ?e ?a
+              :in \$ ?e
+              :where [?e "age" ?a]]""", [
+            db,
+            ["name", "Ivan"]
+          ]));
     });
 
     test('resolve_current_tx', () {}, skip: 'tx ');
@@ -436,8 +480,7 @@ main() {
   });
 
   test('upsert()', () async {
-    final schema = SchemaBuilder()
-      ..attr(':my/tid', ident: Unique.identity);
+    final schema = SchemaBuilder()..attr(':my/tid', ident: Unique.identity);
     var conn = await d.createConn(schema: schema.build());
 
     d.transact(conn, [

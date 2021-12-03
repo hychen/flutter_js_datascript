@@ -4,7 +4,7 @@ import 'package:flutter_js_context/flutter_js_context.dart';
 import 'package:stringr/stringr.dart';
 
 String entityFactory(JsRef db, lookup) {
-  return "vendor.ds.entity(${db.toJsCode()}, $lookup)";
+  return "vendor.ds.entity(${db.toJsCode()}, ${jsonEncode(lookup)})";
 }
 
 class ImmutableError implements Exception {}

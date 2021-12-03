@@ -35,8 +35,9 @@ class DataScript {
 
   /// Low-level fn for creating database quickly from a trusted sequence of
   /// datoms.
-  Future<JsRef> initDb({Schema? schema}) {
-    throw UnimplementedError();
+  JsRef initDb(datoms, {Schema? schema}) {
+    return JsRef.define(context, 'databases',
+        "vendor.ds.init_db(${jsonEncode(datoms)}, ${jsonEncode(schema)});");
   }
 
   /// Converts db into a data structure (not string!) that can be fed to serializer
@@ -65,16 +66,20 @@ class DataScript {
 
   /// Fetches data from database using recursive declarative description.
   /// See [docs.datomic.com/on-prem/pull.html](https://docs.datomic.com/on-prem/pull.html).
-  Future<dynamic> pull(JsRef db, pattern, int eid) {
+  Future<dynamic> pull(JsRef db, pattern, lookup) {
     final code = """
-    vendor.ds.pull(${db.toJsCode()}, '$pattern', ${jsonEncode(eid)});
+    vendor.ds.pull(${db.toJsCode()}, '$pattern', ${jsonEncode(lookup)});
     """;
     return context.evaluateAsync(code);
   }
 
-  /// Same as [[pull]], but accepts sequence of ids and returns sequence of maps.
-  Future<List<PullResult>> pullMany(JsRef db, pattern, List<int> eids) {
-    throw UnimplementedError();
+  /// Same as [pull], but accepts sequence of ids and returns sequence of maps.
+  Future<dynamic> pullMany(JsRef db, pattern, List lookup) {
+    assert(lookup.isNotEmpty);
+    final code = """
+    vendor.ds.pull_many(${db.toJsCode()}, '$pattern', ${jsonEncode(lookup)});
+    """;
+    return context.evaluateAsync(code);
   }
 
   /// Applies transaction to an immutable db value, returning new immutable db
@@ -92,7 +97,7 @@ class DataScript {
 
   /// Retrieves an entity by its id from database. Entities are lazy map-like
   /// structures to navigate DataScript database content.
-  Entity entity(JsRef db, int eid) {
+  Entity entity(JsRef db, eid) {
     return Entity(context, db, eid);
   }
 
@@ -129,14 +134,16 @@ class DataScript {
   }
 
   /// Creates a mutable reference to a given immutable database.
-  /// See [[createConn]].
-  Future connFromDb(JsRef db) {
-    throw UnimplementedError();
+  /// See [createConn].
+  JsRef connFromDb(JsRef db) {
+    return JsRef.define(
+        context, 'databases', "vendor.ds.conn_from_db(${db.toJsCode()});");
   }
 
   /// Creates an empty JsRef and a mutable reference to it. See [createConn].
-  Future connFromDatoms(dataoms, {Schema? schema}) {
-    throw UnimplementedError();
+  JsRef connFromDatoms(dataoms, {Schema? schema}) {
+    return JsRef.define(context, 'databases',
+        "vendor.ds.conn_from_datoms(${jsonEncode(dataoms)}, ${jsonEncode(schema)});");
   }
 
   /// Creates the underlying immutable database from a connection.
@@ -160,8 +167,11 @@ class DataScript {
   /// Forces underlying `conn` value to become `db`.
   /// Will generate a [TxReport] that will remove everything from old value
   /// and insert everything from the new one."
-  Future resetConn(conn, db, {txMeta}) {
-    throw UnimplementedError();
+  resetConn(JsRef conn, JsRef db, {txMeta}) {
+    final code = """
+    vendor.ds.reset_conn(${conn.toJsCode()}, ${db.toJsCode()}, ${jsonEncode(txMeta)});
+    """;
+    return context.evaluate(code);
   }
 
   /// Listen for changes on the given connection.
@@ -191,11 +201,15 @@ class DataScript {
     throw UnimplementedError();
   }
 
-  /// Index lookup. Returns a sequence of datoms (lazy iterator over actual JsRef
+  /// Index lookup. Returns a sequence of datoms (lazy iterator over actual Db
   /// index) which components (e, a, v) match passed arguments.
-  Future<Function> datoms(
-      db, index, Object? c1, Object? c2, Object? c3, Object? c4) {
-    throw UnimplementedError();
+  datoms(
+      JsRef db, String index, Object? c1, Object? c2, Object? c3, Object? c4) {
+    final code = """
+    vendor.ds.datoms(${db.toJsCode()}, '$index', $c1, $c2, $c3, $c4);
+    """;
+    var res = context.evaluate(code) as List;
+    return res.map((e) => [e['e'], e['a'], e['v'], e['tx']]).toList();
   }
 
   /// Similar to [[datoms]], but will return datoms starting from specified
