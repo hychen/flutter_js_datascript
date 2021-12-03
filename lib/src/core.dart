@@ -102,8 +102,8 @@ class DataScript {
   }
 
   /// Returns a db that entity was created from.
-  Future entityDb(Object e) {
-    throw UnimplementedError();
+  JsRef entityDb(Entity e) {
+    return e.db;
   }
 
   /// Returns a view over database that has same interface but only includes
