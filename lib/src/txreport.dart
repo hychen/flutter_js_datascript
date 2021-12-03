@@ -2,6 +2,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'txreport.g.dart';
 
+txDataFromJson(List txData) {
+  return txData.map((e) => [e['e'], e['a'], e['v'], e['tx']]).toList();
+}
+
 /// Transaction Report
 @JsonSerializable(fieldRename: FieldRename.snake)
 class TxReport {
@@ -12,6 +16,7 @@ class TxReport {
   final Map dbAfter;
 
   /// plain datoms that were added/retracted from db-before
+  @JsonKey(fromJson: txDataFromJson)
   final List txData;
 
   /// map of tempid from tx-data => assigned entid in db-after

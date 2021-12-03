@@ -157,11 +157,11 @@ class DataScript {
   /// Applies transaction the underlying database value and atomically updates
   /// connection reference to point to the result of that transaction, new db
   /// value.
-  Future<Map> transact(JsRef conn, List txData, {txMeta}) async {
+  Future<TxReport> transact(JsRef conn, List txData, {txMeta}) async {
     var code = """
     vendor.ds.transact(${conn.toJsCode()},${jsonEncode(txData)}, ${jsonEncode(txMeta)});
     """;
-    return await context.evaluateAsync(code);
+    return TxReport.fromJson(await context.evaluateAsync(code));
   }
 
   /// Forces underlying `conn` value to become `db`.
@@ -197,8 +197,8 @@ class DataScript {
 
   /// Does a lookup in tempids map, returning an entity id that tempid was
   /// resolved to.
-  resolveTempid(Map tempids, int tempid) {
-    throw UnimplementedError();
+  resolveTempid(Map tempids, tempid) {
+    return tempids[tempid.toString()];
   }
 
   /// Index lookup. Returns a sequence of datoms (lazy iterator over actual Db

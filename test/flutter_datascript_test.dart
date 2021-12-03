@@ -178,7 +178,35 @@ main() {
       ], await d.q(q, [db, 2]));
     });
 
-    test('txreport', () {}, skip: 'TODO: add txreport test');
+    test('txreport', () async {
+      var conn = d.createConn();
+      var log = [];
+      var meta = [];
+      d.listen(conn, 'main2', expectAsync1((report) {
+        log.add(report.txData);
+        meta.add(report.txMeta);
+      }));
+      var tx_report = await d.transact(conn, [
+        [":db/add", -1, "name", "Ivan"],
+        [":db/add", -1, "age", 17]
+      ], txMeta: {
+        "some-meta": 1
+      });
+
+      expect([
+        [1, "name", "Ivan", tx0 + 1],
+        [1, "age", 17, tx0 + 1]
+      ], tx_report.txData);
+      expect({"-1": 1, ":db/current-tx": tx0 + 1}, tx_report.tempids);
+      expect(1, d.resolveTempid(tx_report.tempids, -1));
+      expect(tx0 + 1, d.resolveTempid(tx_report.tempids, ":db/current-tx"));
+      expect([
+        [1, "name", "Ivan", tx0 + 1],
+        [1, "age", 17, tx0 + 1]
+      ], log[0]);
+      expect(tx_report.txMeta, {"some-meta": 1});
+      expect(meta[0], {"some-meta": 1});
+    });
 
     test('.entity()', () async {
       final schema = {
@@ -395,7 +423,7 @@ main() {
         [":db/add", -1, "name", "Y"],
         [":db/add", -1, "created-at", ":db/current-tx"]
       ]);
-      var tx = tx_report['tempids'][":db/current-tx"];
+      var tx = tx_report.tempids[":db/current-tx"];
       expect(tx0 + 1, tx);
       expect([
         [1, "created-at", tx, tx],

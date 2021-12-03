@@ -10,7 +10,7 @@ TxReport _$TxReportFromJson(Map<String, dynamic> json) => TxReport(
       dbBefore: json['db_before'] as Map<String, dynamic>,
       dbAfter: json['db_after'] as Map<String, dynamic>,
       tempids: json['tempids'] as Map<String, dynamic>,
-      txData: json['tx_data'] as List<dynamic>,
+      txData: txDataFromJson(json['tx_data'] as List),
       txMeta: json['tx_meta'],
     );
 

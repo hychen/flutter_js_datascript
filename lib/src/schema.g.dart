@@ -31,7 +31,7 @@ Map<String, dynamic> _$SchemaAttributeToJson(SchemaAttribute instance) {
 }
 
 const _$UniqueEnumMap = {
-  Unique.value: ':db.unique',
+  Unique.value: ':db.unique/value',
   Unique.identity: ':db.unique/identity',
 };
 
