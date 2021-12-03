@@ -6,8 +6,6 @@ import 'package:flutter_js_datascript/src/entity.dart';
 import 'schema.dart';
 import 'assets.dart';
 
-typedef PullResult = Map;
-
 class DataScript {
   JsContext context;
 
