@@ -154,10 +154,9 @@ main() {
     test('db.fn/call', () {}, skip: 'TODO: add db.fn/call support');
 
     test('schema', () async {
-      final schema = {
-        "aka": {":db/cardinality": ":db.cardinality/many"}
-      };
-      final db = await d.dbWith(d.emptyDb(schema: schema), [
+      final schema = SchemaBuilder()
+        ..attr('aka', cardinality: Cardinality.many);
+      final db = await d.dbWith(d.emptyDb(schema: schema.build()), [
         [":db/add", -1, "name", "Ivan"],
         [":db/add", -1, "aka", "X"],
         [":db/add", -1, "aka", "Y"],
@@ -209,10 +208,9 @@ main() {
     });
 
     test('.entity()', () async {
-      final schema = {
-        "aka": {":db/cardinality": ":db.cardinality/many"}
-      };
-      var db = await d.dbWith(d.emptyDb(schema: schema), [
+      final schema = SchemaBuilder()
+        ..attr('aka', cardinality: Cardinality.many);
+      var db = await d.dbWith(d.emptyDb(schema: schema.build()), [
         {
           ":db/id": 1,
           "name": "Ivan",
@@ -261,14 +259,10 @@ main() {
 
     test('entity_refs', () async {
       var d = DataScript();
-      var schema = {
-        "father": {":db/valueType": ":db.type/ref"},
-        "children": {
-          ":db/valueType": ":db.type/ref",
-          ":db/cardinality": ":db.cardinality/many"
-        }
-      };
-      var db = await d.dbWith(d.emptyDb(schema: schema), [
+      final schema = SchemaBuilder()
+        ..attr('father', valueType: ValueType.ref)
+        ..attr('children', valueType: ValueType.ref, cardinality: Cardinality.many);
+      var db = await d.dbWith(d.emptyDb(schema: schema.build()), [
         {
           ":db/id": 1,
           "children": [10]
@@ -327,14 +321,10 @@ main() {
 
     test('pull', () async {
       var d = DataScript();
-      var schema = {
-        "father": {":db/valueType": ":db.type/ref"},
-        "children": {
-          ":db/valueType": ":db.type/ref",
-          ":db/cardinality": ":db.cardinality/many"
-        }
-      };
-      var db = await d.dbWith(d.emptyDb(schema: schema), [
+      final schema = SchemaBuilder()
+        ..attr('father', valueType: ValueType.ref)
+        ..attr('children', valueType: ValueType.ref, cardinality: Cardinality.many);
+      var db = await d.dbWith(d.emptyDb(schema: schema.build()), [
         {
           ":db/id": 1,
           "name": "Ivan",
@@ -370,10 +360,9 @@ main() {
     });
 
     test('lookup_refs', () async {
-      final schema = {
-        "name": {":db/unique": ":db.unique/identity"}
-      };
-      var db = await d.dbWith(d.emptyDb(schema: schema), [
+      final schema = SchemaBuilder()
+        ..attr('name', ident: Unique.identity);
+      var db = await d.dbWith(d.emptyDb(schema: schema.build()), [
         {":db/id": 1, "name": "Ivan", "age": 18},
         {":db/id": 2, "name": "Oleg", "age": 32}
       ]);
