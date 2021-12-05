@@ -27,6 +27,20 @@ Use this package to
   - q
   - listen
   - unlisten
+  - initDb
+  - datoms
+  - pull
+  - pullMany
+  - connFromDb
+  - connFromDatoms
+  - resetConn
+  - initDb
+  - dbWith
+  - emptyDb
+  - entityDb
+  - entity
+  - touch
+  - resolveTempids
 
 ## Getting started
 
