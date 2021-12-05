@@ -11,6 +11,7 @@ SchemaAttribute _$SchemaAttributeFromJson(Map<String, dynamic> json) =>
       $enumDecodeNullable(_$UniqueEnumMap, json[':db/unique']),
       $enumDecodeNullable(_$ValueTypeEnumMap, json[':db/valueType']),
       $enumDecodeNullable(_$CardinalityEnumMap, json[':db/cardinality']),
+      json[':db/index'] as bool?,
       json[':db/doc'] as String?,
     );
 
@@ -26,6 +27,7 @@ Map<String, dynamic> _$SchemaAttributeToJson(SchemaAttribute instance) {
   writeNotNull(':db/unique', _$UniqueEnumMap[instance.ident]);
   writeNotNull(':db/valueType', _$ValueTypeEnumMap[instance.valueType]);
   writeNotNull(':db/cardinality', _$CardinalityEnumMap[instance.cardinality]);
+  writeNotNull(':db/index', instance.index);
   writeNotNull(':db/doc', instance.doc);
   return val;
 }

@@ -91,10 +91,14 @@ class SchemaAttribute {
   @JsonKey(name: ':db/cardinality', includeIfNull: false)
   final Cardinality? cardinality;
 
+  @JsonKey(name: ':db/index', includeIfNull: false)
+  final bool? index;
+
   @JsonKey(name: ':db/doc', includeIfNull: false)
   final String? doc;
 
-  SchemaAttribute(this.ident, this.valueType, this.cardinality, this.doc);
+  SchemaAttribute(
+      this.ident, this.valueType, this.cardinality, this.index, this.doc);
 
   factory SchemaAttribute.fromJson(Map<String, dynamic> json) =>
       _$SchemaAttributeFromJson(json);
@@ -103,6 +107,7 @@ class SchemaAttribute {
 
 typedef Schema = Map<String, SchemaAttribute>;
 
+/// Build a <Schema>.
 ///
 /// ```
 /// final builder = SchemaBuilder()
@@ -119,8 +124,9 @@ class SchemaBuilder {
       {Unique? ident,
       ValueType? valueType,
       Cardinality? cardinality,
+      bool? index,
       String? doc}) {
-    schema[name] = SchemaAttribute(ident, valueType, cardinality, doc);
+    schema[name] = SchemaAttribute(ident, valueType, cardinality, index, doc);
   }
 
   /// Returns built schema.

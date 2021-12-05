@@ -428,10 +428,10 @@ main() {
   group('query', () {
     late var people_db;
     setUp(() async {
+      final schema = SchemaBuilder()
+        ..attr('age', index: true);
       people_db = await d.dbWith(
-          d.emptyDb(schema: {
-            "age": {":db/index": true}
-          }),
+          d.emptyDb(schema: schema.build()),
           [
             {":db/id": 1, "name": "Ivan", "age": 15},
             {":db/id": 2, "name": "Petr", "age": 37},
