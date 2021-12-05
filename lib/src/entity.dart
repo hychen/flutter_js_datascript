@@ -58,16 +58,18 @@ class Entity implements Map {
       // the element is navigate ref, then we should just returns its eid
       // because it is a pure js object without functions we want to
       // use.
-      if(element is Map) {
+      if (element is Map) {
         int eid = element['eid'];
         return eid;
       } else {
         return element;
       }
-    };
+    }
+
+    ;
 
     final e = api.get(key);
-    if(e is List) {
+    if (e is List) {
       return e.map(aux).toList();
     } else {
       return aux(e);
