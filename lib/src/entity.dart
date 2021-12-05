@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_js_context/flutter_js_context.dart';
 import 'package:stringr/stringr.dart';
 
-String entityFactory(JsRef db, lookup) {
+String _entityFactory(JsRef db, lookup) {
   return "vendor.ds.entity(${db.toJsCode()}, ${jsonEncode(lookup)})";
 }
 
@@ -16,6 +16,7 @@ class EntityJsApi {
 
   EntityJsApi(this.context, this.db, this.lookup);
 
+  @override
   noSuchMethod(Invocation i) {
     final String s = i.memberName.toString();
     assert(i.isMethod, "$s not supported.");
@@ -26,7 +27,7 @@ class EntityJsApi {
       // @FIXME: should cache entity.
       // @FIXME: the order of values/keys is incorrect.
       next =
-          ".$jsfnName.apply(${entityFactory(db, lookup)}, ${jsonEncode(i.positionalArguments)});";
+          ".$jsfnName.apply(${_entityFactory(db, lookup)}, ${jsonEncode(i.positionalArguments)});";
     } else {
       next = ".$jsfnName()";
     }
@@ -39,17 +40,17 @@ class EntityJsApi {
   }
 
   _loadThen(next) {
-    return context.evaluate(entityFactory(db, lookup) + next);
+    return context.evaluate(_entityFactory(db, lookup) + next);
   }
 }
 
 /// An entity is just an immutable [Map] of facts fetched from db inside
 /// javascript runtime.
 class Entity implements Map {
-  final dynamic api;
-  Entity(context, db, lookup) : api = EntityJsApi(context, db, lookup);
+  final dynamic _api;
+  Entity(context, db, lookup) : _api = EntityJsApi(context, db, lookup);
 
-  JsRef get db => api.db;
+  JsRef get db => _api.db;
 
   @override
   operator [](Object? key) {
@@ -68,7 +69,7 @@ class Entity implements Map {
 
     ;
 
-    final e = api.get(key);
+    final e = _api.get(key);
     if (e is List) {
       return e.map(aux).toList();
     } else {
@@ -103,21 +104,21 @@ class Entity implements Map {
 
   @override
   bool containsKey(Object? key) {
-    return (api.keySet() as List).any((e) {
+    return (_api.keySet() as List).any((e) {
       return e == key;
     });
   }
 
   @override
   bool containsValue(Object? value) {
-    return (api.valueSet() as List).any((e) {
+    return (_api.valueSet() as List).any((e) {
       return e == value;
     });
   }
 
   @override
   Iterable<MapEntry> get entries {
-    return (api.entrySet() as List).map((e) {
+    return (_api.entrySet() as List).map((e) {
       return MapEntry(e[0], e[1]);
     });
   }
@@ -136,10 +137,10 @@ class Entity implements Map {
   bool get isNotEmpty => !isEmpty;
 
   @override
-  Iterable get keys => api.keySet();
+  Iterable get keys => _api.keySet();
 
   @override
-  int get length => api.keySet().length;
+  int get length => _api.keySet().length;
 
   @override
   Map<K2, V2> map<K2, V2>(
@@ -178,5 +179,5 @@ class Entity implements Map {
   }
 
   @override
-  Iterable get values => api.valueSet();
+  Iterable get values => _api.valueSet();
 }
