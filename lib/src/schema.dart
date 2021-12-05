@@ -107,7 +107,7 @@ class SchemaAttribute {
 
 typedef Schema = Map<String, SchemaAttribute>;
 
-/// Build a <Schema>.
+/// Build a [Schema].
 ///
 /// ```
 /// final builder = SchemaBuilder()
