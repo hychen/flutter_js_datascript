@@ -261,7 +261,8 @@ main() {
       var d = DataScript();
       final schema = SchemaBuilder()
         ..attr('father', valueType: ValueType.ref)
-        ..attr('children', valueType: ValueType.ref, cardinality: Cardinality.many);
+        ..attr('children',
+            valueType: ValueType.ref, cardinality: Cardinality.many);
       var db = await d.dbWith(d.emptyDb(schema: schema.build()), [
         {
           ":db/id": 1,
@@ -323,7 +324,8 @@ main() {
       var d = DataScript();
       final schema = SchemaBuilder()
         ..attr('father', valueType: ValueType.ref)
-        ..attr('children', valueType: ValueType.ref, cardinality: Cardinality.many);
+        ..attr('children',
+            valueType: ValueType.ref, cardinality: Cardinality.many);
       var db = await d.dbWith(d.emptyDb(schema: schema.build()), [
         {
           ":db/id": 1,
@@ -360,8 +362,7 @@ main() {
     });
 
     test('lookup_refs', () async {
-      final schema = SchemaBuilder()
-        ..attr('name', ident: Unique.identity);
+      final schema = SchemaBuilder()..attr('name', ident: Unique.identity);
       var db = await d.dbWith(d.emptyDb(schema: schema.build()), [
         {":db/id": 1, "name": "Ivan", "age": 18},
         {":db/id": 2, "name": "Oleg", "age": 32}
@@ -428,15 +429,12 @@ main() {
   group('query', () {
     late var people_db;
     setUp(() async {
-      final schema = SchemaBuilder()
-        ..attr('age', index: true);
-      people_db = await d.dbWith(
-          d.emptyDb(schema: schema.build()),
-          [
-            {":db/id": 1, "name": "Ivan", "age": 15},
-            {":db/id": 2, "name": "Petr", "age": 37},
-            {":db/id": 3, "name": "Ivan", "age": 37}
-          ]);
+      final schema = SchemaBuilder()..attr('age', index: true);
+      people_db = await d.dbWith(d.emptyDb(schema: schema.build()), [
+        {":db/id": 1, "name": "Ivan", "age": 15},
+        {":db/id": 2, "name": "Petr", "age": 37},
+        {":db/id": 3, "name": "Ivan", "age": 37}
+      ]);
     });
 
     test('q_coll', () async {
